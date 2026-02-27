@@ -7,7 +7,7 @@ We also provide a DEG extraction protocol as well as the RMarkdown pdf for machi
 # Requisites for data downloading
 *TCGAbiolinks*, *SummarizedExperiment*, *tidyverse*, *dplyr*
 
-# Requisites for data downloading
+# Requisites for DEG extraction
 *DESeq2*, *dplyr*, *caret*
 
 # Processed datasets
