@@ -21,4 +21,4 @@ DEG_extraction_protocol.R - Contains the step-by-step script on extracting DEGs 
 
 # PDFs
 
-Final_rmark_cp_1.pdf - RMarkdown pdf protocol
+Random_Forest_Book_Chapter_Protocol.pdf - RMarkdown pdf protocol
