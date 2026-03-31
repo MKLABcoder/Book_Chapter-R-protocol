@@ -100,4 +100,4 @@ write.table(tumor_raw, "raw_counts_brca.csv", row.names = T, col.names = T, sep 
 
 normal_raw <- counts_df %>% filter(shortLetterCode == "NT")
 write.table(normal_raw, "raw_counts_normal.csv", row.names = T, col.names = T, sep = ",", quote = F)
-###---- Proceed to book chapter protocol ---###
+###---- Proceed to DEG extraction protocol ---###
