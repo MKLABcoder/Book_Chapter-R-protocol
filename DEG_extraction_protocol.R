@@ -3,7 +3,7 @@ library(dplyr)
 library(DESeq2)
 library(caret)
 library(ggplot2)
-
+library(stringr)
 
 # Loading Raw Counts for Tumor and Normal
 tumor_raw  <- read.csv("raw_counts_brca.csv", check.names = FALSE)
@@ -34,7 +34,7 @@ counts_filtered <- as.data.frame(
   row.names = rownames(counts_filtered)
 )
 gene_variance <- apply(counts_filtered, 1, var)
-# Threshold out the bottom 25% 
+# Threshold out the bottom 50% 
 threshold <- quantile(counts_filtered, 0.5, na.rm = T)
 # Only keep the genes that are above the threshold
 counts_filtered <- counts_filtered[gene_variance > threshold, ]
@@ -42,10 +42,13 @@ counts_filtered <- counts_filtered[gene_variance > threshold, ]
 counts_filtered <- counts_filtered[!is.na(rownames(counts_filtered)), ]
 dim(counts_filtered)
 
-
 # Stratified Train-Test Split(70:30)
 ml_data <- as.data.frame(t(counts_filtered))
-ml_data$type <- as.factor(as.vector(unlist(counts_labels)))
+counts_labels <- as.character(unlist(counts_labels))
+ml_data$type <- factor(counts_labels)
+
+ml_data <- ml_data %>%
+  mutate(type = counts_labels)
 ml_data <- ml_data %>% dplyr::select(type, everything())
 
 set.seed(345)
@@ -99,20 +102,29 @@ cat("Number of significant DEGs:", nrow(res_sig), "\n")
 
 write.csv(res_sig, "Significant_DEGs_all.csv", row.names = T)
 
-# Selecting the top 200 DEGs
-top_genes <- rownames(res_sig)[1:200]
+top_genes <- rownames(res_sig)
 
-# Getting the DEGs raw counts from the main counts_filtered file
-# And the sample information
+# Download the lncRNA file from gencode v32
+# Subsetting the DEGs for differentially expressed lncRNA only 
+gencode.v32.long_noncoding_RNAs <- read.delim("gencode.v32.long_noncoding_RNAs.gtf", header=FALSE, comment.char="#")
 
-counts <- cbind(tumor_raw, normal_raw)
-dim(counts)
-counts <- as.data.frame(t(counts))
+lncrna_genes <- gencode.v32.long_noncoding_RNAs %>% filter(V3 == "gene")
+lncrna_genes <- gencode.v32.long_noncoding_RNAs %>%
+  filter(V3 == "gene") %>%
+  mutate(gene_id = str_remove(str_extract(V9, 'ENSG[^"]+'), '\\..*'))
+lncrna_gene_ids <- as.data.frame(unique(lncrna_genes$gene_id))
+
+write.csv(lncrna_gene_ids, "lncRNA_Gene_IDs.csv")
 
 
-counts_labels <- counts$shortLetterCode
-counts_degs <- counts[, top_genes]
-counts_degs$type <- as.factor(as.vector(unlist(counts_labels)))
-counts_degs <- counts_degs %>% dplyr::select(type, everything())
+lncrna_degs <- intersect(lncrna_gene_ids$`unique(lncrna_genes$gene_id)`, top_genes)
 
-write.csv(counts_degs, "raw_counts_degs_all_samples.csv", row.names = T, col.names = T)
+counts_lncrna_degs <- counts[lncrna_degs, ]
+counts_lncrna_degs <- as.data.frame(t(counts_lncrna_degs))
+counts_lncrna_degs$type <- factor(counts_labels)
+
+counts_lncrna_degs <- counts_lncrna_degs %>%
+  mutate(type = counts_labels)
+counts_lncrna_degs <- counts_lncrna_degs %>% dplyr::select(type, everything())
+
+write.csv(counts_lncrna_degs, "lncRNA_DEGs_ml_input.csv", col.names = T, row.names = T)
