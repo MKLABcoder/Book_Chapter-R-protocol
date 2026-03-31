@@ -128,3 +128,4 @@ counts_lncrna_degs <- counts_lncrna_degs %>%
 counts_lncrna_degs <- counts_lncrna_degs %>% dplyr::select(type, everything())
 
 write.csv(counts_lncrna_degs, "lncRNA_DEGs_ml_input.csv", col.names = T, row.names = T)
+### --- Proceed to Book chapter protocol --- ###
