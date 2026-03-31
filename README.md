@@ -8,15 +8,17 @@ We also provide a DEG extraction protocol as well as the RMarkdown pdf for machi
 *TCGAbiolinks*, *SummarizedExperiment*, *tidyverse*, *dplyr*
 
 # Requisites for DEG extraction
-*DESeq2*, *dplyr*, *caret*
+*DESeq2*, *dplyr*, *caret*, *stringr*
 
 # Processed datasets
-raw_counts_degs_all_samples.csv - contains the top 200 DEGs raw count data for all 1224 TCGA-BRCA samples
+This file needs to be downloaded to follow the protocol
+lncRNA_DEGs_ml_input.csv - Contains the significant differentially expressed lncRNA raw counts 
 
 # Scripts
 
 TCGA_data_download.R - Contains a step-by-step script on how TCGA-BRCA data can be downloaded from R 
+DEG_extraction_protocol.R - Contains the step-by-step script on extracting DEGs and making the processed file provided
 
 # PDFs
 
-Final_rmark.pdf - RMarkdown pdf protocol
+Final_rmark_cp_1.pdf - RMarkdown pdf protocol
