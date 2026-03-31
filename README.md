@@ -11,14 +11,18 @@ We also provide a DEG extraction protocol as well as the RMarkdown pdf for machi
 *DESeq2*, *dplyr*, *caret*, *stringr*
 
 # Processed datasets
+
 This file needs to be downloaded to follow the protocol
+
 lncRNA_DEGs_ml_input.csv - Contains the significant differentially expressed lncRNA raw counts 
+
 lncRNA_Gene_IDs.csv - We have also provided this file with all the gencode extracted gene IDs for lncRNA in case the user cannot download the genocode file. 
 
 # Scripts
 
 TCGA_data_download.R - Contains a step-by-step script on how TCGA-BRCA data can be downloaded from R 
-DEG_extraction_protocol.R - Contains the step-by-step script on extracting DEGs and making the processed file provided
+
+DEG_extraction_protocol.R - Contains the step-by-step script for extracting DEGs and making the processed file provided
 
 # PDFs
 
